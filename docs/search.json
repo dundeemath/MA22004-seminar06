@@ -1,0 +1,254 @@
+[
+  {
+    "objectID": "seminar06.html#attendance",
+    "href": "seminar06.html#attendance",
+    "title": "Seminar 06",
+    "section": "Attendance",
+    "text": "Attendance"
+  },
+  {
+    "objectID": "seminar06.html#reminders",
+    "href": "seminar06.html#reminders",
+    "title": "Seminar 06",
+    "section": "Reminders",
+    "text": "Reminders\n\nDiscuss critical components of statistical studies at Thu workshop.\nDiscuss worksheet 5 at Fri workshop.\nLab 4 due Fri 2024-10-25 at 17:00."
+  },
+  {
+    "objectID": "seminar06.html#outline-of-today",
+    "href": "seminar06.html#outline-of-today",
+    "title": "Seminar 06",
+    "section": " Outline of today",
+    "text": "Outline of today\n\nComparing means\n\nfor paired observations\nfor independent observations\n\nComparing proportions\n\n Tennis?\n\nComparing variances"
+  },
+  {
+    "objectID": "seminar06.html#inferences-for-means",
+    "href": "seminar06.html#inferences-for-means",
+    "title": "Seminar 06",
+    "section": "Inferences for means",
+    "text": "Inferences for means\nToday we compare means based on two samples from different groups.\nI.e., \\bar{X} = \\frac{1}{m} \\sum_{i=1}^m X_i \\,, \\qquad \\text{iid}~X_1, \\dots, X_m \\sim \\mathsf{N}(\\mu_X, \\sigma_X^2) and \\bar{Y} = \\frac{1}{n} \\sum_{i=1}^n Y_i \\,, \\qquad \\text{iid}~Y_1, \\dots, Y_n \\sim \\mathsf{N}(\\mu_Y, \\sigma_Y^2)\n\n\nPopulations may not be the same, a priori.\nNote difference in sample size different n vs m.\nRecall sample mean."
+  },
+  {
+    "objectID": "seminar06.html#two-types-of-sampling",
+    "href": "seminar06.html#two-types-of-sampling",
+    "title": "Seminar 06",
+    "section": "Two types of sampling",
+    "text": "Two types of sampling\nComparisons for means fall into two types:\n\nsets of observations are dependent (paired )\nsets of observations are independent (across groups  )\n\n\n\n\n\n\n\nWhat is independent?\n\n\nThe samples must still be independent within each set of observations.\n\n\n\n\n\nE.g., paired: before and after study, same subject (score on test)\nWithin each sample, obs must be iid\nProcesses for CI and H-Tests are same; point estimators are different; margin error will be different (critical value * standard error)"
+  },
+  {
+    "objectID": "seminar06.html#when-sets-of-observations-are-paired-between-groups",
+    "href": "seminar06.html#when-sets-of-observations-are-paired-between-groups",
+    "title": "Seminar 06",
+    "section": "When sets of observations are paired between groups…",
+    "text": "When sets of observations are paired between groups…"
+  },
+  {
+    "objectID": "seminar06.html#paired-data",
+    "href": "seminar06.html#paired-data",
+    "title": "Seminar 06",
+    "section": "Paired data",
+    "text": "Paired data\n\n\n\n\n\n\nPaired\n\n\nWhen two sets of observations have a special correspondence (i.e. are dependent) the sets of observations are said to be paired.\n\n\n\nE.g., groups can be related by being the same group of people, the same item, or being subjected to the same conditions.\nWhat is the approach?\nTo analyze paired data we will consider the difference of each paired observation:\n \\mu_{D} = \\mu_{X} - \\mu_{Y}\n\n\nCorrespondence between data points\nOrder of \\mu_X and \\mu_Y matter? No, but be careful when placing"
+  },
+  {
+    "objectID": "seminar06.html#paired-math-science-scores",
+    "href": "seminar06.html#paired-math-science-scores",
+    "title": "Seminar 06",
+    "section": "Paired math & science scores",
+    "text": "Paired math & science scores\n\nConsider 200 observations of students that took a standardized science and math test. How are the distributions similar? How are they different?\n\n\\mu_{sci}, \\sigma_{sci}, \\mu_{mat}, \\sigma_{mat}\nScience scores are slightly more left skewed (median is closer to 75% than to 25%); more disperse.\n\\bar{x}_{sci} = 51.85, s_{sci} = 9.9009\n\\bar{x}_{mat} = 52.645, s_{mat} = 9.3684"
+  },
+  {
+    "objectID": "seminar06.html#paired-or-not",
+    "href": "seminar06.html#paired-or-not",
+    "title": "Seminar 06",
+    "section": "Paired or not?",
+    "text": "Paired or not?\n\n\n\n\n\n\nid\nmath\nscience\ndiff\n\n\n\n\n70\n41\n47\n-6\n\n\n121\n53\n63\n-10\n\n\n86\n54\n58\n-4\n\n\n141\n47\n53\n-6\n\n\n\n\n\n\n\n\nCan the math and science scores for a given student be assumed to be independent of each other?\n\n\nIf they are a high achieving student, they are more likely to score higher on both tests.\nSocio-economic factors, etc."
+  },
+  {
+    "objectID": "seminar06.html#paired-1",
+    "href": "seminar06.html#paired-1",
+    "title": "Seminar 06",
+    "section": "Paired!",
+    "text": "Paired!\n\n\n\n\n\n\nid\nmath\nscience\ndiff\n\n\n\n\n70\n41\n47\n-6\n\n\n121\n53\n63\n-10\n\n\n86\n54\n58\n-4\n\n\n141\n47\n53\n-6\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nIndependence?\n\n\nData is collected independently (students sit tests independently), but the scores across subjects for a single student are dependent (correlated) in practice."
+  },
+  {
+    "objectID": "seminar06.html#means-of-paired-data",
+    "href": "seminar06.html#means-of-paired-data",
+    "title": "Seminar 06",
+    "section": "Means of paired data",
+    "text": "Means of paired data\n\n\nPop. Parameter\n\\mu_{\\text{diff}} Average difference between math and science scores of all students.\n\nPoint estimator\n\\bar{x}_{\\text{diff}} Average difference between math and science scores of 200 sampled students."
+  },
+  {
+    "objectID": "seminar06.html#hypothesis-test-for-paired-data",
+    "href": "seminar06.html#hypothesis-test-for-paired-data",
+    "title": "Seminar 06",
+    "section": "Hypothesis test for paired data",
+    "text": "Hypothesis test for paired data\nH_0 : \\mu_{\\text{diff}} = 0\\,, \\quad \\text{(there is no difference between scores)} \\mathsf{vs} H_a : \\mu_{\\text{diff}} \\neq 0\\,, \\quad \\text{(there is a difference between scores)}\nCalculate an appropriate test statistic for the new parameter \\mu_{\\text{diff}}.\n\\bar{x}_{\\text{diff}} =  0.795 \\,,\\quad s_{\\text{diff}} = 8.2938 \\,,\\quad n_{\\text{diff}} = 200\\,. \n\n\n\n\n\n\nNothing new!\n\n\nCarry out inference on a single sample population mean."
+  },
+  {
+    "objectID": "seminar06.html#calculate-test-statistic",
+    "href": "seminar06.html#calculate-test-statistic",
+    "title": "Seminar 06",
+    "section": "Calculate test statistic",
+    "text": "Calculate test statistic\nLet \\alpha = 0.10\nH_0 : \\mu_{\\text{diff}} = 0\nH_a : \\mu_{\\text{diff}} \\neq 0\n\\bar{x}_{\\text{diff}} =  0.7950\ns_{\\text{diff}} = 8.2938\nn_{\\text{diff}} = 200\n\n\nt = \\frac{0.7950 - 0}{ \\frac{8.2938}{\\sqrt{200}}} = 1.3556 where df = 200-1 = 199\nP-value is twice area under \\mathsf{t}(199) to right of |t| : 0.1767629; 2*pt(1.3556, df=199, lower.tail = FALSE)\nP = 0.18 &gt; 0.1 = \\alpha \\Rightarrow “fail to reject”: the evidence does not provide convincing evidence that the means are different at the 0.1 level."
+  },
+  {
+    "objectID": "seminar06.html#recap-p-values",
+    "href": "seminar06.html#recap-p-values",
+    "title": "Seminar 06",
+    "section": "Recap: P-values",
+    "text": "Recap: P-values\n\nHow does the P-value relate to the reference distribution? How should one interpret the P-value?"
+  },
+  {
+    "objectID": "seminar06.html#ladder-plot",
+    "href": "seminar06.html#ladder-plot",
+    "title": "Seminar 06",
+    "section": "Ladder plot",
+    "text": "Ladder plot\n\n\n\n\n\n\n\nLines join paired math and science scores.\n\n\n\n\n\nSome differences will be positive, some negative. It is not surprising that we fail to reject the null hypothesis."
+  },
+  {
+    "objectID": "seminar06.html#when-sets-of-observations-are-independent-between-groups",
+    "href": "seminar06.html#when-sets-of-observations-are-independent-between-groups",
+    "title": "Seminar 06",
+    "section": "When sets of observations are independent between groups…",
+    "text": "When sets of observations are independent between groups…"
+  },
+  {
+    "objectID": "seminar06.html#difference-of-means-easy-cases",
+    "href": "seminar06.html#difference-of-means-easy-cases",
+    "title": "Seminar 06",
+    "section": "Difference of means: easy cases",
+    "text": "Difference of means: easy cases\nThe parameter of interest \\mu_{D} = \\mu_{X} - \\mu_{Y}.\nGeneral interval estimate: \\text{point estimate} \\pm \\text{margin of error}\n\nif the populations are normal with known variances, or\nif the populations have unknown variances but the sample sizes are large,\n\nthen the margin of error uses a normal reference distribution and the standard error is easy to compute:\n\\widehat{\\sigma}_{(\\bar{x} - \\bar{y})} = \\sqrt{\\frac{s_x^2}{m} + \\frac{s_y^2}{n}}"
+  },
+  {
+    "objectID": "seminar06.html#difference-of-means-unpaired-mathsft",
+    "href": "seminar06.html#difference-of-means-unpaired-mathsft",
+    "title": "Seminar 06",
+    "section": "Difference of means: unpaired \\mathsf{t}",
+    "text": "Difference of means: unpaired \\mathsf{t}\nGeneral interval estimate: \\text{point estimate} \\pm \\text{margin of error}\nHow to compute the margin of error if the populations are normal (with unknown variance) but the sample size is small?\nFor the parameter of interest \\mu_{D} = \\mu_{X} - \\mu_{Y}: (\\bar{x} - \\bar{y}) \\pm t_{\\alpha/2, \\nu} \\cdot \\widehat{\\sigma}_{(\\bar{x} - \\bar{y})}\n\n\n\n\n\n\nWhat should the…\n\n\n… standard error be?\n… dof be?\n\n\n\n\n\nstandard error: \\sqrt{\\frac{s_x^2}{m} + \\frac{s_y^2}{n}}\nnote even though we are looking for difference, the variances add!"
+  },
+  {
+    "objectID": "seminar06.html#tricky-parts-pooled-estimators",
+    "href": "seminar06.html#tricky-parts-pooled-estimators",
+    "title": "Seminar 06",
+    "section": "Tricky parts… pooled estimators",
+    "text": "Tricky parts… pooled estimators\nIf the population variances are (assumed) the same, then replace standarded error with:\n\\sqrt{s_p^2 \\left(\\frac{1}{m} + \\frac{1}{n}\\right)}\\,,\nwhich uses the pooled estimator for single parameter \\sigma^2: S_p^2 = \\frac{m-1}{m+n-2} S_X^2 + \\frac{n-1}{m+n-2}S_Y^2\\,."
+  },
+  {
+    "objectID": "seminar06.html#tricky-parts-welchs-formula",
+    "href": "seminar06.html#tricky-parts-welchs-formula",
+    "title": "Seminar 06",
+    "section": "Tricky parts… Welch’s formula",
+    "text": "Tricky parts… Welch’s formula\n\n\nDof is given by (rounded down to the nearest integer) \\begin{align*}\n\\nu &= \\frac{ \\left( \\frac{s_X^2}{m} + \\frac{s_Y^2}{n} \\right)^2}{\\frac{(s_X^2 / m)^2}{m-1} + \\frac{(s_Y^2/n)^2}{n-1}} \\\\\n&= \\frac{ \\left( s_{\\bar{X}}^2 + s_{\\bar{Y}}^2 \\right)^2}{\\frac{s_{\\bar{X}}^4}{m-1} + \\frac{s_{\\bar{Y}}^4}{n-1}}\n\\end{align*}"
+  },
+  {
+    "objectID": "seminar06.html#tricky-parts-dof-estimate",
+    "href": "seminar06.html#tricky-parts-dof-estimate",
+    "title": "Seminar 06",
+    "section": "Tricky parts… dof (estimate?)",
+    "text": "Tricky parts… dof (estimate?)\nComplicated to compute true degrees of freedom (dof) \\nu!\n\n\n\n\n\n\nA conservative estimate for the dof is\n\n\n\\nu = \\min(m-1, n-1)\\,.\n\n\n\nCheck conditions\n\nIndependence of samples both within and between groups.\nSample size and skew (more skewed distributions need larger number of samples)."
+  },
+  {
+    "objectID": "seminar06.html#the-task",
+    "href": "seminar06.html#the-task",
+    "title": "Seminar 06",
+    "section": " The task",
+    "text": "The task\n\n\nElect:\n\n1 “good” athlete,\n1 “poor” athlete, &\n2 judges\n\n\nEach athlete will pre-record anticipated success ratio.\nEach athlete will take 20 shots, in turn.\nCalculate success ratios.\n\nWe will use this data to make some inferences about the true success rations for each athlete."
+  },
+  {
+    "objectID": "seminar06.html#population-proportions",
+    "href": "seminar06.html#population-proportions",
+    "title": "Seminar 06",
+    "section": "Population proportions",
+    "text": "Population proportions\n\nConsider a sample of size m from a population containing a proportion p_X of individuals satisfying a given property. Denote the sample proportion by \\widehat{p}_X. Likewise, n, p_Y, \\widehat{p}_Y.\nAssume the samples from the X and Y populations are independent.\nThe natural estimator for the difference in population proportions p_X - p_Y is the difference in the sample proportions \\widehat{p}_X - \\widehat{p}_Y\\,."
+  },
+  {
+    "objectID": "seminar06.html#population-proportions-1",
+    "href": "seminar06.html#population-proportions-1",
+    "title": "Seminar 06",
+    "section": "Population proportions",
+    "text": "Population proportions\nAssuming samples are much smaller than population size,\n\n\\mu_{(\\widehat{p}_X - \\widehat{p}_Y)} = \\mathop{\\mathrm{\\mathbf{E}}}[\\widehat{p}_X - \\widehat{p}_Y] = p_X - p_Y\\,,\n and \n\\sigma_{(\\widehat{p}_X - \\widehat{p}_Y)}^2 = \\mathop{\\mathrm{Var}}[\\widehat{p}_X - \\widehat{p}_Y]\n= \\frac{p_X(1-p_X)}{m} + \\frac{p_Y(1-p_Y)}{n}\\,,\n\nbecause count of individuals satisfying given property indep. draws from \\mathsf{Binom}(m, p_X) and \\mathsf{Binom}(n, p_Y)."
+  },
+  {
+    "objectID": "seminar06.html#population-proportions-and-clt",
+    "href": "seminar06.html#population-proportions-and-clt",
+    "title": "Seminar 06",
+    "section": "Population proportions and CLT",
+    "text": "Population proportions and CLT\nIf m and n are large (say &gt; 30), difference between to proportions:\n\\widehat{p}_X - \\widehat{p}_Y \\sim \\mathsf{N}\\left(p_X - p_Y,  \\frac{p_X(1-p_X)}{m} + \\frac{p_Y(1-p_Y)}{n}\\right)\\,.\nThus, (standardizing) \\frac{\\widehat{p}_X - \\widehat{p}_Y - (p_X - p_Y)}{\\sqrt{\\frac{p_X(1-p_X)}{m} + \\frac{p_Y(1-p_Y)}{n}}} = Z \\sim \\mathsf{N}\\left(0,  1\\right)\\,."
+  },
+  {
+    "objectID": "seminar06.html#alpha-ci-for-p_x---p_y",
+    "href": "seminar06.html#alpha-ci-for-p_x---p_y",
+    "title": "Seminar 06",
+    "section": "100(1-\\alpha)\\% CI for p_X - p_Y",
+    "text": "100(1-\\alpha)\\% CI for p_X - p_Y\n\n\\widehat{p}_X - \\widehat{p}_Y \\pm z_{\\alpha/2}\\sqrt{\\frac{\\widehat{p}_X (1 - \\widehat{p}_X)}{m} + \\frac{\\widehat{p}_Y (1 - \\widehat{p}_Y)}{n}}\\,,\n\n\n\n\n\n\n\nRule of thumb\n\n\nInference suitable when m \\widehat{p}_X, m (1 - \\widehat{p}_X), n \\widehat{p}_Y, and n (1-\\widehat{p}_Y) are greater than or equal to 10.\n\n\n\nWhy use the rule of thumb above? What assumptions does the above rule of thumb attempt to satisfy?"
+  },
+  {
+    "objectID": "seminar06.html#tennis-ball-success-ratios",
+    "href": "seminar06.html#tennis-ball-success-ratios",
+    "title": "Seminar 06",
+    "section": "   Tennis Ball Success Ratios",
+    "text": "Tennis Ball Success Ratios\nTypical observed success is 7/20 to 9/20.\nSuppose true success ratios p_1 and p_2.\n\nConstruct a 95% confidence interval for (p_1 - p_2).\nIs the difference in proportions statistically significant at level 0.05?\n\n\n\n\n\n\n\nPower\n\n\nHow many tries would be necessary to be likely to find a statistically significant result?"
+  },
+  {
+    "objectID": "seminar06.html#hypothesis-test-on-equality",
+    "href": "seminar06.html#hypothesis-test-on-equality",
+    "title": "Seminar 06",
+    "section": "Hypothesis test on equality",
+    "text": "Hypothesis test on equality\nIf we are considering a hypothesis test concerning the equality of the population proportions, \nH_0 : p_X - p_Y = 0 \\,,\n then we assume p_X = p_Y as our default position.\n\n\n\n\n\n\nBecause the null assumes p_X = p_Y …\n\n\n…we must replace the standard error with a pooled estimator for the standard error of the population proportion, \\widehat{p} = \\frac{m}{m + n} \\widehat{p}_X + \\frac{n}{m + n} \\widehat{p}_Y \\,."
+  },
+  {
+    "objectID": "seminar06.html#pooled-estimator",
+    "href": "seminar06.html#pooled-estimator",
+    "title": "Seminar 06",
+    "section": "Pooled estimator",
+    "text": "Pooled estimator\nConsider H_0 : p_X - p_Y = 0.\nThe test statistic is \nZ = \\frac{\\widehat{p}_X - \\widehat{p}_Y}{\\sqrt{\\widehat{p} (1 - \\widehat{p}) \\left( \\frac{1}{m} + \\frac{1}{n} \\right)}} \\,.\n\n\n\n\n\n\n\nImportant\n\n\nNote the test statistic uses the pooled estimator \\widehat{p}."
+  },
+  {
+    "objectID": "seminar06.html#hypothesis-test-for-difference-of-proportions",
+    "href": "seminar06.html#hypothesis-test-for-difference-of-proportions",
+    "title": "Seminar 06",
+    "section": "Hypothesis test for difference of proportions",
+    "text": "Hypothesis test for difference of proportions\nFor a test at level \\alpha:\nIf H_a : p_X - p_Y &gt; 0, then P = 1 - \\Phi(z), i.e., upper-tail R = \\{z &gt; z_{\\alpha}\\}.\nIf H_a : p_X - p_Y &lt; 0, then P = \\Phi(z), i.e., lower-tail R = \\{z &lt; - z_{\\alpha}\\}.\nIf H_a : p_X - p_Y \\neq 0, then P = 2(1-\\Phi(|z|)), i.e., two-tailed R = \\{|z| &gt; z_{\\alpha/2}\\}.\n\n\n\n\n\n\nRule of thumb\n\n\nInference suitable if m \\widehat{p}_X, m (1-\\widehat{p}_X), n\\widehat{p}_Y, n(1-\\widehat{p}_Y) are all greater than 10."
+  },
+  {
+    "objectID": "seminar06.html#the-setting",
+    "href": "seminar06.html#the-setting",
+    "title": "Seminar 06",
+    "section": "The setting",
+    "text": "The setting\nConsider a random sample \nX_1, \\dots, X_m \\sim \\mathsf{N}(\\mu_X, \\sigma_X^2)\n and an independent random sample \nY_1, \\dots, Y_n \\sim \\mathsf{N}(\\mu_Y, \\sigma_Y^2)\\,.\n\n\n\n\n\n\n\nWarning\n\n\nHow can we make inferences about unknown parameters \\sigma_X^2 and \\sigma_Y^2?"
+  },
+  {
+    "objectID": "seminar06.html#comparing-variances-ratio",
+    "href": "seminar06.html#comparing-variances-ratio",
+    "title": "Seminar 06",
+    "section": "Comparing variances: ratio",
+    "text": "Comparing variances: ratio\nCompare the ratio \\sigma_X^2 / \\sigma_Y^2 (not the difference).\nThe rv \nF = \\frac{S_X^2 / \\sigma_X^2}{S_Y^2 / \\sigma_Y^2} \\quad \\sim \\mathsf{F}(m-1, n-1)\\,.\n\nThat is, F has an \\mathsf{F} distribution with df \\nu_1 = m-1 and \\nu_2 = n-1.\nThe \\mathsf{F} distribution is related to ratios of \\chi^2 rvs…"
+  },
+  {
+    "objectID": "seminar06.html#mathsff-distribution",
+    "href": "seminar06.html#mathsff-distribution",
+    "title": "Seminar 06",
+    "section": "\\mathsf{F} distribution",
+    "text": "\\mathsf{F} distribution\n\n\\mathsf{F}(\\nu_1, \\nu_2) has integer ‘numerator dof’ \\nu_1 &gt;0 and ‘denominator dof’ \\nu_2 &gt; 0."
+  },
+  {
+    "objectID": "seminar06.html#making-comparisons-with-a-ratio",
+    "href": "seminar06.html#making-comparisons-with-a-ratio",
+    "title": "Seminar 06",
+    "section": "Making comparisons with a ratio",
+    "text": "Making comparisons with a ratio\nThe statistic F comprises the ratio of variances \\sigma_X^2 / \\sigma_Y^2 and not the difference; therefore, the plausibility of \\sigma_X^2 = \\sigma_Y^2 will be based on how much the ratio differs from 1.\nFor H_0 : \\sigma_X^2 = \\sigma_Y^2, \nf = \\frac{s_X^2}{s_Y^2}\n and the P-values are determined by the \\mathsf{F}(m-1, n-1) curve where m and n are the respective sample sizes."
+  },
+  {
+    "objectID": "seminar06.html#hypothesis-test-for-comparing-variances",
+    "href": "seminar06.html#hypothesis-test-for-comparing-variances",
+    "title": "Seminar 06",
+    "section": "Hypothesis test for comparing variances",
+    "text": "Hypothesis test for comparing variances\nFor a hypothesis test at level \\alpha, we use the following procedure:\nIf H_a : \\sigma_X^2 &gt; \\sigma_Y^2, then P-value is A_R = {} area under the \\mathsf{F}(m-1, n-1) curve to the right of f.\nIf H_a : \\sigma_X^2 &lt; \\sigma_Y^2, then P-value is A_L = {} area under the \\mathsf{F}(m-1, n-1) curve to the left of f.\nIf H_a : \\sigma_X^2 \\neq \\sigma_Y^2, then P-value is 2 \\cdot \\min(A_R, A_L).\n\n\n\n\n\n\nNote\n\n\nAssume the population distributions are normal and the random samples are both independent of one another."
+  },
+  {
+    "objectID": "seminar06.html#alpha-ci-for-ratio-sigma_x2-sigma_y2",
+    "href": "seminar06.html#alpha-ci-for-ratio-sigma_x2-sigma_y2",
+    "title": "Seminar 06",
+    "section": "100(1-\\alpha)\\% CI for ratio \\sigma_X^2 / \\sigma_Y^2",
+    "text": "100(1-\\alpha)\\% CI for ratio \\sigma_X^2 / \\sigma_Y^2\nFor the ratio of population variances \\sigma_X^2 / \\sigma_Y^2, is given by \n\\left(\\frac{1}{F_{\\alpha/2, m-1, n-1}} \\frac{s_X^2}{s_Y^2} \\,,  \\frac{1}{F_{1-\\alpha/2, m-1, n-1}} \\frac{s_X^2}{s_Y^2} \\right)\\,."
+  }
+]

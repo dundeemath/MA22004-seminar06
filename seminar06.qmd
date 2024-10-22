@@ -1,0 +1,607 @@
+---
+title: "Seminar 06"
+subtitle: "MA22004"
+date: "2024-10-23"
+author: "Dr Eric Hall   •   ehall001@dundee.ac.uk"
+format: 
+  revealjs:
+    chalkboard: true
+    html-math-method: katex
+    theme: [default, resources/custom.scss]
+    css: resources/fonts.css
+    logo: resources/logo.png
+    footer: ""
+    template-partials:
+      - resources/title-slide.html
+    transition: slide
+    background-transition: fade
+from: markdown+emoji
+lang: en
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(echo = FALSE, comment = "", fig.asp = .5)
+library(tidyverse)
+library(latex2exp)
+library(knitr)
+library(kableExtra)
+library(janitor)
+library(fontawesome)
+library(latex2exp)
+library(openintro)
+data(hsb2)
+lsz <- 1.0
+tsz <- 4
+theme_ur <- theme(legend.justification = c(1,1), legend.position = c(1,1), legend.box.margin = margin(c(4, 4, 4, 4), unit = "pt"))
+theme_lr <- theme(legend.justification = c(1,0), legend.position = c(1,0), legend.box.margin = margin(c(4, 4, 4, 4), unit = "pt"))
+```
+
+# Announcements {.mySegue .center}
+:::{.hidden}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\E}{\mathbf{E}}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\corr}{corr}
+\newcommand{\se}{\mathsf{se}}
+\DeclareMathOperator{\sd}{sd}
+:::
+
+## Attendance
+
+::: {layout="[[-1], [1], [-1]]"}
+![](images/seats.png){fig-align="center" fig-alt="Register your attendance using SEAtS"}
+:::
+
+## Reminders 
+
+- Discuss critical components of statistical studies at Thu workshop. 
+- Discuss worksheet 5 at Fri workshop.
+- Lab 4 due **Fri 2024-10-25** at **17:00**. 
+
+
+## `r fa("compass")` Outline of today 
+
+1. Comparing means
+   - for paired observations
+   - for independent observations
+
+2. Comparing proportions
+   - `r fa("lightbulb")` Tennis? 
+
+3. Comparing variances
+
+
+
+# Comparing means {.mySegue .center}
+
+## Inferences for means {.smaller}
+
+Today we compare **means** based on two samples from different groups. 
+
+I.e.,
+$$\bar{X} = \frac{1}{m} \sum_{i=1}^m X_i \,, \qquad \text{iid}~X_1, \dots, X_m \sim \mathsf{N}(\mu_X, \sigma_X^2)$$
+and 
+$$\bar{Y} = \frac{1}{n} \sum_{i=1}^n Y_i \,, \qquad \text{iid}~Y_1, \dots, Y_n \sim \mathsf{N}(\mu_Y, \sigma_Y^2)$$
+
+:::{.notes}
+- Populations may not be the same, a priori.
+- Note difference in sample size different $n$ vs $m.$
+- Recall sample mean. 
+:::
+
+## Two types of sampling 
+
+Comparisons for means fall into two types:
+
+- sets of observations are dependent (**paired** `r fa("user-group")`)
+
+- sets of observations are independent (across groups `r fa("user")` `r fa("user-ninja")`)
+
+:::{.callout-warning}
+## What is independent?
+
+The samples must still be independent *within* each set of observations. 
+:::
+
+:::{.notes}
+- E.g., paired: before and after study, same subject (score on test)
+- Within each sample, obs must be iid
+- Processes for CI and H-Tests are same; point estimators are different; margin error will be different (critical value * standard error)
+:::
+
+## When sets of observations are paired between groups... {.mySegue .center}
+`r fa("user-group")` `r fa("user-group")` `r fa("user-group")` `r fa("user-group")` `r fa("user-group")`
+
+## Paired data {.smaller}
+
+:::{.callout-note}
+## Paired 
+
+When two sets of observations have a special correspondence (i.e.\ are dependent) the sets of observations are said to be paired. 
+:::
+
+E.g., groups can be related by being the same group of people, the same item, or being subjected to the same conditions.
+
+### What is the approach?
+To analyze paired data we will consider the difference of each paired observation:
+
+$$ \mu_{D} = \mu_{X} - \mu_{Y}$$
+
+:::{.notes}
+- Correspondence between data points
+- Order of $\mu_X$ and $\mu_Y$ matter? No, but be careful when placing 
+:::
+
+
+## Paired math & science scores {.smaller}
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Consider 200 observations of students that took a standardized science and math test. How are the distributions similar? How are they different?"
+# xs <- mean(hsb2$science)
+# ss <- sd(hsb2$science)
+# xm <- mean(hsb2$math)
+# sm <- sd(hsb2$math)
+hsb2 |> 
+  select(id, math, science) |>
+  pivot_longer(cols = 2:3, names_to = "subject", values_to = "score") |>
+  ggplot(aes(x = subject, y = score)) + 
+  geom_dotplot(binaxis = 'y', dotsize = .8, 
+               stackdir = 'center', alpha = 0.6, 
+               aes(fill = subject, color=subject)) + 
+  geom_boxplot(alpha = 0) + 
+    labs(x = "Subject", y = "Test Score (out of 100)") + 
+  theme_classic() + theme(legend.position="none")
+```
+
+:::{.notes}
+- $\mu_{sci},$ $\sigma_{sci},$ $\mu_{mat},$ $\sigma_{mat}$
+- Science scores are slightly more left skewed (median is closer to 75\% than to 25%); more disperse. 
+- $\bar{x}_{sci} = 51.85,$ $s_{sci} = 9.9009$
+- $\bar{x}_{mat} = 52.645,$ $s_{mat} = 9.3684$
+:::
+
+## Paired or not?
+
+```{r}
+hsb2 <- hsb2 |> 
+  select(id, math, science) |>
+  mutate(diff = math - science)
+xd <- mean(hsb2$diff)
+sd <- sd(hsb2$diff)
+hsb2 |>
+  head(4) |>
+  kable() |>
+  kable_styling()
+```
+
+Can the math and science scores for a given student be assumed to be independent of each other?
+
+:::{.notes}
+- If they are a high achieving student, they are more likely to score higher on both tests. 
+- Socio-economic factors, etc.
+:::
+
+## Paired!
+
+```{r}
+hsb2 <- hsb2 |> select(id, math, science) |>
+  mutate(diff = math - science)
+xd <- mean(hsb2$diff)
+sd <- sd(hsb2$diff)
+hsb2 |>
+  head(4) |>
+  kable() |>
+  kable_styling()
+```
+
+:::{.callout-note}
+## Independence?
+
+Data is collected independently (students sit tests independently), but the scores across subjects for a single student are dependent (correlated) in practice. 
+:::
+
+## Means of paired data
+
+::::{.columns}
+::: {.column width="50%"}
+### Pop. Parameter
+$$\mu_{\text{diff}}$$ 
+Average difference between math and science scores of **all** students.
+:::
+
+::: {.column width="50%"}
+### Point estimator
+$$\bar{x}_{\text{diff}}$$
+Average difference between math and science scores of 200 **sampled** students.
+:::
+::::
+
+## Hypothesis test for paired data {.smaller}
+
+$$H_0 : \mu_{\text{diff}} = 0\,, \quad \text{(there is no difference between scores)}$$
+$$\mathsf{vs}$$
+$$H_a : \mu_{\text{diff}} \neq 0\,, \quad \text{(there is a difference between scores)}$$
+
+Calculate an appropriate test statistic for the *new* parameter $\mu_{\text{diff}}.$ 
+
+$$\bar{x}_{\text{diff}} =  0.795 \,,\quad s_{\text{diff}} = 8.2938 \,,\quad n_{\text{diff}} = 200\,. $$
+
+:::{.callout-important}
+## Nothing new!
+
+Carry out inference on a single sample population mean. 
+:::
+
+## Calculate test statistic
+Let $\alpha = 0.10$
+
+$H_0 : \mu_{\text{diff}} = 0$
+
+$H_a : \mu_{\text{diff}} \neq 0$ 
+
+$\bar{x}_{\text{diff}} =  0.7950$
+
+$s_{\text{diff}} = 8.2938$
+
+$n_{\text{diff}} = 200$ 
+
+:::{.notes}
+- $t = \frac{0.7950 - 0}{ \frac{8.2938}{\sqrt{200}}} = 1.3556$ where $df = 200-1 = 199$
+- $P$-value is twice area under $\mathsf{t}(199)$ to right of $|t|$ : 0.1767629; `2*pt(1.3556, df=199, lower.tail = FALSE)`
+- $P = 0.18 > 0.1 = \alpha \Rightarrow$ "fail to reject": the evidence does not provide convincing evidence that the means are different at the 0.1 level. 
+:::
+
+## Recap: $P$-values 
+
+```{r} 
+#| echo: false
+#| fig-cap: "How does the $P$-value relate to the reference distribution? How should one interpret the $P$-value?"
+t <- 1.3556
+tdist <- tibble(x = seq(-4, 4, 0.1), 
+                density = dt(x = seq(-4, 4, 0.1), df = 199))
+ggplot(tdist, aes(x = x, y = density)) +
+  geom_line(linewidth = 2) + 
+  theme_classic() +
+  theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+```
+
+## Ladder plot {.smaller}
+
+:::: {.columns}
+::: {.column width="80%"}
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Lines join paired math and science scores."
+xs <- mean(hsb2$science)
+ss <- sd(hsb2$science)
+xm <- mean(hsb2$math)
+sm <- sd(hsb2$math)
+scores <- hsb2 |> select(id, math, science) |>
+  pivot_longer(cols = 2:3, names_to = "subject", values_to = "score")
+ggplot(scores, aes(x = subject, y = score, group = id)) + 
+  geom_line(alpha = 0.5) + 
+  labs(x = "Subject", y = "Test Score (out of 100)") +
+  theme_classic()
+```
+:::
+
+:::{.column width="20%"}
+Some differences will be positive, some negative. It is not surprising that we *fail to reject* the null hypothesis. 
+:::
+::::
+
+## When sets of observations are independent between groups... {.mySegue .center}
+`r fa("user")` `r fa("user-ninja")` `r fa("user")` `r fa("user")`  
+`r fa("user")` `r fa("user-astronaut")` `r fa("user")` `r fa("user-tie")` `r fa("user")`  
+
+
+## Difference of means: easy cases {.smaller}
+
+The parameter of interest $\mu_{D} = \mu_{X} - \mu_{Y}.$
+
+General interval estimate:
+$$\text{point estimate} \pm \text{margin of error}$$
+
+- if the populations are normal with known variances, or
+- if the populations have unknown variances but the sample sizes are large,
+
+then the margin of error uses a normal reference distribution and the standard error is easy to compute:
+
+$$\widehat{\sigma}_{(\bar{x} - \bar{y})} = \sqrt{\frac{s_x^2}{m} + \frac{s_y^2}{n}}$$
+
+## Difference of means: unpaired $\mathsf{t}$ {.smaller}
+
+General interval estimate:
+$$\text{point estimate} \pm \text{margin of error}$$
+
+How to compute the margin of error if the populations are normal (with unknown variance) but the sample size is small?
+
+For the parameter of interest $\mu_{D} = \mu_{X} - \mu_{Y}$:
+$$(\bar{x} - \bar{y}) \pm t_{\alpha/2, \nu} \cdot \widehat{\sigma}_{(\bar{x} - \bar{y})}$$
+
+:::{.callout-warning}
+## What should the...
+... standard error be?  
+... dof be?
+:::
+
+:::{.notes}
+- standard error: $\sqrt{\frac{s_x^2}{m} + \frac{s_y^2}{n}}$
+- note even though we are looking for difference, the variances add!
+:::
+
+## Tricky parts... pooled estimators 
+
+If the population variances are (assumed) the same, then replace standarded error with:
+
+$$\sqrt{s_p^2 \left(\frac{1}{m} + \frac{1}{n}\right)}\,,$$
+
+which uses the **pooled estimator** for single parameter $\sigma^2$:
+$$S_p^2 = \frac{m-1}{m+n-2} S_X^2 + \frac{n-1}{m+n-2}S_Y^2\,.$$
+
+## Tricky parts... Welch's formula 
+
+::::{.columns}
+::: {.column width="60%"}
+Dof is given by (rounded down to the nearest integer)
+$$\begin{align*}
+\nu &= \frac{ \left( \frac{s_X^2}{m} + \frac{s_Y^2}{n} \right)^2}{\frac{(s_X^2 / m)^2}{m-1} + \frac{(s_Y^2/n)^2}{n-1}} \\ 
+ &= \frac{ \left( s_{\bar{X}}^2 + s_{\bar{Y}}^2 \right)^2}{\frac{s_{\bar{X}}^4}{m-1} + \frac{s_{\bar{Y}}^4}{n-1}}
+ \end{align*}$$
+:::
+
+:::{.column width="40%"}
+![](images/The_Scream_Pastel.jpg){width=85% .right alt="The Scream by Edvard Munch."}
+:::
+::::
+
+## Tricky parts... dof (estimate?) {.smaller}
+
+Complicated to compute true degrees of freedom (dof) $\nu$!
+
+:::{.callout-important}
+## A conservative estimate for the dof is 
+
+$$\nu = \min(m-1, n-1)\,.$$
+:::
+
+### Check conditions
+
+1. Independence of samples both within and between groups. 
+2. Sample size and skew (more skewed distributions need larger number of samples).
+
+# Comparing proportions {.mySegue .center}
+
+## `r fa("lightbulb")` The task {.smaller}
+
+:::: {.columns}
+::: {.column width="60%"}
+
+Elect: 
+
+- 1 "good" athlete, 
+- 1 "poor" athlete, & 
+- 2 judges
+
+
+1. Each athlete will pre-record anticipated success ratio.
+2. Each athlete will take 20 shots, in turn.
+3. Calculate success ratios.
+
+We will use this data to make some inferences about the true success rations for each athlete.
+:::
+
+::: {.column width="40%"}
+
+![](images/640px-Tennis_Balls_(5390499643).jpg){width=100% alt="Photo of tennis balls."}
+:::
+::::
+
+## Population proportions
+
+- Consider a sample of size $m$ from a population containing a proportion $p_X$ of individuals satisfying a given property. Denote the sample proportion by $\widehat{p}_X.$ Likewise, $n,$ $p_Y,$ $\widehat{p}_Y.$ 
+
+- Assume the samples from the $X$ and $Y$ populations are independent. 
+
+- The natural estimator for the difference in population proportions $p_X - p_Y$ is the difference in the sample proportions $\widehat{p}_X - \widehat{p}_Y\,.$
+
+## Population proportions {.smaller}
+Assuming samples are much smaller than population size,
+
+$$
+ \mu_{(\widehat{p}_X - \widehat{p}_Y)} = \E[\widehat{p}_X - \widehat{p}_Y] = p_X - p_Y\,,
+$$
+and 
+$$
+ \sigma_{(\widehat{p}_X - \widehat{p}_Y)}^2 = \Var[\widehat{p}_X - \widehat{p}_Y] 
+ = \frac{p_X(1-p_X)}{m} + \frac{p_Y(1-p_Y)}{n}\,,
+ $$
+
+because count of individuals satisfying given property indep. draws from $\mathsf{Binom}(m, p_X)$ and $\mathsf{Binom}(n, p_Y).$ 
+
+
+## Population proportions and CLT
+
+If $m$ and $n$ are large (say > 30), difference between to proportions:
+
+$$\widehat{p}_X - \widehat{p}_Y \sim \mathsf{N}\left(p_X - p_Y,  \frac{p_X(1-p_X)}{m} + \frac{p_Y(1-p_Y)}{n}\right)\,.$$
+
+Thus, (standardizing)
+$$\frac{\widehat{p}_X - \widehat{p}_Y - (p_X - p_Y)}{\sqrt{\frac{p_X(1-p_X)}{m} + \frac{p_Y(1-p_Y)}{n}}} = Z \sim \mathsf{N}\left(0,  1\right)\,.$$
+
+
+## $100(1-\alpha)\%$ CI for  $p_X - p_Y$
+
+$$ 
+\widehat{p}_X - \widehat{p}_Y \pm z_{\alpha/2}\sqrt{\frac{\widehat{p}_X (1 - \widehat{p}_X)}{m} + \frac{\widehat{p}_Y (1 - \widehat{p}_Y)}{n}}\,,
+$$
+
+:::{.callout-tip}
+## Rule of thumb
+
+Inference suitable when $m \widehat{p}_X,$ $m (1 - \widehat{p}_X),$ $n \widehat{p}_Y,$ and $n (1-\widehat{p}_Y)$ are greater than or equal to $10.$ 
+:::
+
+Why use the rule of thumb above? What assumptions does the above rule of thumb attempt to satisfy?
+
+## `r fa("lightbulb")` &nbsp;&nbsp;Tennis Ball Success Ratios
+
+Typical observed success is $7/20$ to $9/20.$
+
+Suppose true success ratios $p_1$ and $p_2.$
+
+- Construct a 95\% confidence interval for $(p_1 - p_2).$
+- Is the difference in proportions statistically significant at level 0.05?
+
+:::{.callout-warning}
+## Power
+
+How many tries would be necessary to be likely to find a statistically significant result?
+:::
+
+## Hypothesis test on equality {.smaller}
+
+If we are considering a hypothesis test concerning the equality of the population proportions,
+$$
+H_0 : p_X - p_Y = 0 \,,
+$$
+then we assume $p_X = p_Y$ as our default position.
+
+:::{.callout-important}
+## Because the null assumes $p_X = p_Y$ ... 
+
+...we must replace the standard error with a pooled estimator for the standard error of the population proportion,
+$$\widehat{p} = \frac{m}{m + n} \widehat{p}_X + \frac{n}{m + n} \widehat{p}_Y \,.$$
+:::
+
+## Pooled estimator
+ 
+Consider $H_0 : p_X - p_Y = 0.$ 
+
+The test statistic is
+$$
+ Z = \frac{\widehat{p}_X - \widehat{p}_Y}{\sqrt{\widehat{p} (1 - \widehat{p}) \left( \frac{1}{m} + \frac{1}{n} \right)}} \,.
+$$
+ 
+:::{.callout-important} 
+Note the test statistic uses the pooled estimator $\widehat{p}.$  
+:::
+
+## Hypothesis test for difference of proportions {.smaller}
+
+For a test at level $\alpha$:
+
+If $H_a : p_X - p_Y > 0,$ then $P = 1 - \Phi(z),$ i.e., upper-tail $R = \{z > z_{\alpha}\}.$
+
+If $H_a : p_X - p_Y < 0,$ then $P = \Phi(z),$ i.e., lower-tail $R = \{z < - z_{\alpha}\}.$
+
+If $H_a : p_X - p_Y \neq 0,$ then $P = 2(1-\Phi(|z|)),$ i.e., two-tailed $R = \{|z| > z_{\alpha/2}\}.$
+
+:::{.callout-tip}
+## Rule of thumb
+
+Inference suitable if $m \widehat{p}_X,$ $m (1-\widehat{p}_X),$ $n\widehat{p}_Y,$ $n(1-\widehat{p}_Y)$ are all greater than $10.$ 
+:::
+
+# Comparing variances {.mySegue .center}
+
+## The setting
+
+Consider a random sample 
+$$
+X_1, \dots, X_m \sim \mathsf{N}(\mu_X, \sigma_X^2)
+$$
+and an independent random sample 
+$$
+Y_1, \dots, Y_n \sim \mathsf{N}(\mu_Y, \sigma_Y^2)\,.
+$$
+
+:::{.callout-warning}
+How can we make inferences about unknown parameters $\sigma_X^2$ and $\sigma_Y^2$?
+:::
+
+## Comparing variances: ratio
+
+Compare the **ratio** $\sigma_X^2 / \sigma_Y^2$ (not the difference). 
+
+The rv
+$$
+ F = \frac{S_X^2 / \sigma_X^2}{S_Y^2 / \sigma_Y^2} \quad \sim \mathsf{F}(m-1, n-1)\,.
+$$
+
+That is, $F$ has an $\mathsf{F}$ distribution with df $\nu_1 = m-1$ and $\nu_2 = n-1.$ 
+
+
+The $\mathsf{F}$ distribution is related to ratios of $\chi^2$ rvs...
+
+
+## $\mathsf{F}$ distribution 
+
+```{r}
+#| echo: false
+#| warning: false
+#| fig-cap: "$\\mathsf{F}(\\nu_1, \\nu_2)$ has integer 'numerator dof' $\\nu_1 >0$ and 'denominator dof' $\\nu_2 > 0.$"
+#| fig-alt: "The density for $\\mathsf{F}(\\nu_1, \\nu_2)$ for several combinations of $(\\nu_1, \\nu_2).$"
+f.dist <- data.frame(f = 0:1000 / 100) |> 
+ mutate(df_1_1 = df(x = f, df1 = 1, df2 = 1),
+        df_2_1 = df(x = f, df1 = 2, df2 = 1),
+        df_5_2 = df(x = f, df1 = 5, df2 = 2),
+        df_10_2 = df(x = f, df1 = 10, df2 = 2),
+        df_100_100 = df(x = f, df1 = 100, df2 = 100)) |>
+ gather(key = "df", value = "density", -f)
+f.dist$df <- factor(f.dist$df, levels = c("df_1_1", "df_2_1", "df_5_2", "df_10_2", "df_100_100"), labels = c("(1, 1)", "(2, 1)", "(5, 2)", "(10, 2)", "(100, 100)"))
+ggplot(f.dist, aes(x = f, y = density, color = df)) +
+ geom_line(size = 2) + ylim(c(0,2.1)) + xlim(c(0,3)) +
+ labs(y = TeX("$f(x;\\nu_1, \\nu_2)$"), x = TeX("$x$"), color = TeX("$(\\nu_1, \\nu_2)$")) + theme_classic()
+```
+
+
+## Making comparisons with a ratio
+
+The statistic $F$ comprises the *ratio* of variances $\sigma_X^2 / \sigma_Y^2$ and not the difference; therefore, the plausibility of $\sigma_X^2 = \sigma_Y^2$ will be based on **how much the ratio differs from $1$**.
+
+For $H_0 : \sigma_X^2 = \sigma_Y^2,$
+$$
+f = \frac{s_X^2}{s_Y^2}
+$$
+and the $P$-values are determined by the $\mathsf{F}(m-1, n-1)$ curve where $m$ and $n$ are the respective sample sizes.
+
+## Hypothesis test for comparing variances {.smaller}
+
+For a hypothesis test at level $\alpha,$ we use the following procedure:
+
+If $H_a : \sigma_X^2 > \sigma_Y^2,$ then $P$-value is $A_R = {}$ area under the $\mathsf{F}(m-1, n-1)$ curve to the right of $f.$
+
+If $H_a : \sigma_X^2 < \sigma_Y^2,$ then $P$-value is $A_L = {}$ area under the $\mathsf{F}(m-1, n-1)$ curve to the left of $f.$
+
+If $H_a : \sigma_X^2 \neq \sigma_Y^2,$ then $P$-value is $2 \cdot \min(A_R, A_L).$
+
+:::{.callout-note}
+Assume the population distributions are normal and the random samples are both independent of one another.
+:::
+
+## $100(1-\alpha)\%$ CI for ratio $\sigma_X^2 / \sigma_Y^2$ 
+
+For the *ratio* of population variances $\sigma_X^2 / \sigma_Y^2,$ is given by
+$$
+ \left(\frac{1}{F_{\alpha/2, m-1, n-1}} \frac{s_X^2}{s_Y^2} \,,  \frac{1}{F_{1-\alpha/2, m-1, n-1}} \frac{s_X^2}{s_Y^2} \right)\,.
+$$
+
+# Summary
+
+Today we discussed CI and hypothesis tests for comparing: means (paired and independent), proportions, and variances.
+
+We carried out an experiment to compare proportions.
+
+:::{.callout-tip}
+## Today's materials 
+
+Slides posted to <https://dundeemath.github.io/MA22004-seminar06>.
+:::
